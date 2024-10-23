@@ -4,6 +4,7 @@ import { MovieController } from './movie.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Movie } from './entity/movie.entity';
 import { MovieDetail } from './entity/movie-detail.entity';
+import { CommonModule } from 'src/common/common.module';
 
 @Module({
   imports: [
@@ -11,6 +12,7 @@ import { MovieDetail } from './entity/movie-detail.entity';
       Movie, //
       MovieDetail,
     ]),
+    CommonModule,
   ],
   controllers: [MovieController],
   providers: [MovieService],
