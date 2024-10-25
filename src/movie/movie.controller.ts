@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   Body,
   Controller,
   Delete,
@@ -9,6 +10,8 @@ import {
   Post,
   Query,
   Req,
+  UploadedFile,
+  UploadedFiles,
   UseInterceptors,
 } from '@nestjs/common';
 import { MovieService } from './movie.service';
@@ -17,9 +20,18 @@ import { Public } from 'src/auth/decorator/public.decorator';
 import { RBAC } from 'src/auth/decorator/rbac.decorator';
 import { Role } from 'src/user/entities/user.entity';
 import { GetMoviesDto } from './dto/get-movies.dto';
-import { CacheInterceptor } from 'src/common/interceptor/cache.interceptor';
+import { CacheInterceptor as CommonCacheInterceptor } from 'src/common/interceptor/cache.interceptor';
 import { TransactionInterceptor } from 'src/common/interceptor/transaction.interceptor';
 import { UserId } from 'src/user/decorator/user-id.decorator';
+import { QueryRunnerDeco } from 'src/common/decorator/query-runner.decorator';
+import { QueryRunner } from 'typeorm';
+import {
+  FileFieldsInterceptor,
+  FileInterceptor,
+  FilesInterceptor,
+} from '@nestjs/platform-express';
+import { CacheInterceptor, CacheKey, CacheTTL } from '@nestjs/cache-manager';
+import { Throttle } from 'src/common/decorator/throttle.decorator';
 
 @Controller('movie')
 export class MovieController {
@@ -27,11 +39,24 @@ export class MovieController {
 
   @Get()
   @Public()
-  @UseInterceptors(CacheInterceptor)
+  @Throttle({
+    count: 5,
+    unit: 'minute',
+  })
+  @UseInterceptors(CommonCacheInterceptor)
   getMoives(
     @Query() dto: GetMoviesDto, //
+    @UserId() userId?: number,
   ) {
-    return this.movieService.findAll(dto);
+    return this.movieService.findAll(dto, userId);
+  }
+
+  @Get('recent')
+  @UseInterceptors(CacheInterceptor)
+  @CacheKey('getMoviesRecent')
+  @CacheTTL(1000)
+  getMoviesRecent() {
+    return this.movieService.findRecent();
   }
 
   @Get(':id')
@@ -45,10 +70,10 @@ export class MovieController {
   @UseInterceptors(TransactionInterceptor)
   postMovie(
     @Body() body: CreateMovieDto, //
-    @Req() req,
+    @QueryRunnerDeco() queryRunner: QueryRunner,
     @UserId() userId: number,
   ) {
-    return this.movieService.create(body, userId, req.queryRunner);
+    return this.movieService.create(body, userId, queryRunner);
   }
 
   @Patch(':id')
@@ -66,5 +91,21 @@ export class MovieController {
     @Param('id', ParseIntPipe) id: number, //
   ) {
     return this.movieService.remove(id);
+  }
+
+  @Post(':id/like')
+  createMovieLike(
+    @Param('id', ParseIntPipe) movieId: number,
+    @UserId() userId: number,
+  ) {
+    return this.movieService.toggleMovieLike(movieId, userId, true);
+  }
+
+  @Post(':id/dislike')
+  createMovieDislike(
+    @Param('id', ParseIntPipe) movieId: number,
+    @UserId() userId: number,
+  ) {
+    return this.movieService.toggleMovieLike(movieId, userId, false);
   }
 }

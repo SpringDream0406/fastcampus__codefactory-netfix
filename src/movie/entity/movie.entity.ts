@@ -5,6 +5,7 @@ import {
   JoinTable,
   ManyToMany,
   ManyToOne,
+  OneToMany,
   OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
@@ -14,6 +15,8 @@ import { Director } from 'src/director/entity/director.entity';
 import { Genre } from 'src/genre/entity/genre.entity';
 import { IsString } from 'class-validator';
 import { User } from 'src/user/entities/user.entity';
+import { Transform } from 'class-transformer';
+import { MovieUserLike } from './movie-user-like.entity';
 
 @Entity()
 export class Movie extends BaseTable {
@@ -40,6 +43,13 @@ export class Movie extends BaseTable {
   @JoinColumn()
   detail: MovieDetail;
 
+  @Column()
+  @Transform(({ value }) => `http://localhost:3000/${value}`)
+  movieFilePath: string;
+
   @ManyToOne(() => Director, (director) => director.id)
   director: Director;
+
+  @OneToMany(() => MovieUserLike, (mul) => mul.movie)
+  likedUsers: MovieUserLike[];
 }

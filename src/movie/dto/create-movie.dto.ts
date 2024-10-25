@@ -1,6 +1,7 @@
 import { PickType } from '@nestjs/mapped-types';
 import { Movie } from '../entity/movie.entity';
 import { ArrayNotEmpty, IsArray, IsNumber, IsString } from 'class-validator';
+import { Type } from 'class-transformer';
 
 export class CreateMovieDto extends PickType(Movie, ['title']) {
   @IsString()
@@ -12,5 +13,9 @@ export class CreateMovieDto extends PickType(Movie, ['title']) {
   @IsArray()
   @ArrayNotEmpty()
   @IsNumber({}, { each: true })
+  @Type(() => Number)
   genreIds: number[];
+
+  @IsString()
+  movieFileName: string;
 }

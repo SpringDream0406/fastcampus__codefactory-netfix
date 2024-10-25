@@ -21,6 +21,10 @@ import { MovieModule } from './movie/movie.module';
 import { ResponseTimeInterceptor } from './common/interceptor/response-time.interceptor';
 import { ForbiddenExceptionFilter } from './common/filter/forbidden.filter';
 import { QueryFailedExceptionFilter } from './common/filter/query-failed.filter';
+import { ServeStaticModule } from '@nestjs/serve-static';
+import { join } from 'path';
+import { CacheModule } from '@nestjs/cache-manager';
+import { ThrottleInterceptor } from './common/interceptor/throttle.interceptor';
 
 @Module({
   imports: [
@@ -29,6 +33,14 @@ import { QueryFailedExceptionFilter } from './common/filter/query-failed.filter'
       validationSchema: validationSchema,
     }),
     TypeOrmModule.forRootAsync(databaseConfig),
+    ServeStaticModule.forRoot({
+      rootPath: join(process.cwd(), 'public'),
+      serveRoot: '/public/',
+    }),
+    CacheModule.register({
+      ttl: 0,
+      isGlobal: true,
+    }),
     DirectorModule,
     GenreModule,
     AuthModule,
@@ -46,13 +58,17 @@ import { QueryFailedExceptionFilter } from './common/filter/query-failed.filter'
       useClass: RBACGuard,
     },
     { provide: APP_INTERCEPTOR, useClass: ResponseTimeInterceptor },
-    {
-      provide: APP_FILTER,
-      useClass: ForbiddenExceptionFilter,
-    },
+    // {
+    //   provide: APP_FILTER,
+    //   useClass: ForbiddenExceptionFilter,
+    // },
     {
       provide: APP_FILTER,
       useClass: QueryFailedExceptionFilter,
+    },
+    {
+      provide: APP_INTERCEPTOR,
+      useClass: ThrottleInterceptor,
     },
   ],
 })

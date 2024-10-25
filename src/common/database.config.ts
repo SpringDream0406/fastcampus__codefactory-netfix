@@ -6,6 +6,7 @@ import { MovieDetail } from 'src/movie/entity/movie-detail.entity';
 import { Movie } from 'src/movie/entity/movie.entity';
 import { User } from 'src/user/entities/user.entity';
 import { envKeys } from './const/env.const';
+import { MovieUserLike } from 'src/movie/entity/movie-user-like.entity';
 
 export const databaseConfig = {
   useFactory: (configService: ConfigService): TypeOrmModuleOptions => {
@@ -16,7 +17,7 @@ export const databaseConfig = {
       username: configService.get<string>(envKeys.dbUsername),
       password: configService.get<string>(envKeys.dbPassword),
       database: configService.get<string>(envKeys.dbDatabase),
-      entities: [Movie, MovieDetail, Director, Genre, User],
+      entities: [Movie, MovieDetail, Director, Genre, User, MovieUserLike],
       synchronize: true,
     };
   },
