@@ -25,6 +25,7 @@ import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
 import { CacheModule } from '@nestjs/cache-manager';
 import { ThrottleInterceptor } from './common/interceptor/throttle.interceptor';
+import { ScheduleModule } from '@nestjs/schedule';
 
 @Module({
   imports: [
@@ -41,6 +42,7 @@ import { ThrottleInterceptor } from './common/interceptor/throttle.interceptor';
       ttl: 0,
       isGlobal: true,
     }),
+    ScheduleModule.forRoot(),
     DirectorModule,
     GenreModule,
     AuthModule,

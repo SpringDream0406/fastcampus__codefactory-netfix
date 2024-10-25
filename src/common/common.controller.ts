@@ -16,7 +16,6 @@ export class CommonController {
         fileSize: 2000000,
       },
       fileFilter(req, file, callback) {
-        console.log(file);
         if (file.mimetype !== 'video/mp4')
           return callback(
             new BadRequestException('MP4 파일만 업로드 가능합니다!'),
