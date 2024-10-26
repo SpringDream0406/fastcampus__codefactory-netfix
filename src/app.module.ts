@@ -44,37 +44,37 @@ import * as winston from 'winston';
       ttl: 0,
       isGlobal: true,
     }),
-    WinstonModule.forRoot({
-      level: 'debug',
-      transports: [
-        new winston.transports.Console({
-          format: winston.format.combine(
-            winston.format.colorize({
-              all: true,
-            }),
-            winston.format.timestamp(),
-            winston.format.printf(
-              (info) =>
-                `[${info.context}] ${info.timestamp} ${info.level} ${info.message}`,
-            ),
-          ),
-        }),
-        new winston.transports.File({
-          dirname: join(process.cwd(), 'logs'),
-          filename: 'logs.log',
-          format: winston.format.combine(
-            // winston.format.colorize({
-            //   all: true,
-            // }),
-            winston.format.timestamp(),
-            winston.format.printf(
-              (info) =>
-                `[${info.context}] ${info.timestamp} ${info.level} ${info.message}`,
-            ),
-          ),
-        }),
-      ],
-    }),
+    // WinstonModule.forRoot({
+    //   level: 'debug',
+    //   transports: [
+    //     new winston.transports.Console({
+    //       format: winston.format.combine(
+    //         winston.format.colorize({
+    //           all: true,
+    //         }),
+    //         winston.format.timestamp(),
+    //         winston.format.printf(
+    //           (info) =>
+    //             `[${info.context}] ${info.timestamp} ${info.level} ${info.message}`,
+    //         ),
+    //       ),
+    //     }),
+    //     new winston.transports.File({
+    //       dirname: join(process.cwd(), 'logs'),
+    //       filename: 'logs.log',
+    //       format: winston.format.combine(
+    //         // winston.format.colorize({
+    //         //   all: true,
+    //         // }),
+    //         winston.format.timestamp(),
+    //         winston.format.printf(
+    //           (info) =>
+    //             `[${info.context}] ${info.timestamp} ${info.level} ${info.message}`,
+    //         ),
+    //       ),
+    //     }),
+    //   ],
+    // }),
     ScheduleModule.forRoot(),
     DirectorModule,
     GenreModule,

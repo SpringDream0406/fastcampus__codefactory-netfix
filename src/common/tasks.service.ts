@@ -16,12 +16,12 @@ export class TasksService {
     @InjectRepository(Movie)
     private readonly movieRepository: Repository<Movie>,
     private readonly schedulerRegistry: SchedulerRegistry,
-    // private readonly logger: DefaultLogger,
-    @Inject(WINSTON_MODULE_NEST_PROVIDER)
-    private readonly logger: LoggerService,
+    private readonly logger: DefaultLogger,
+    // @Inject(WINSTON_MODULE_NEST_PROVIDER)
+    // private readonly logger: LoggerService,
   ) {}
 
-  @Cron('*/5 * * * * *')
+  // @Cron('*/5 * * * * *')
   logEverySecond() {
     this.logger.fatal('FATAL 레벨 로그', null, TasksService.name);
     this.logger.error('ERROR 레벨 로그', null, TasksService.name);
