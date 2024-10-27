@@ -7,8 +7,6 @@ import {
 } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule } from '@nestjs/config';
-import { validationSchema } from './common/validation.schema';
-import { databaseConfig } from './common/database.config';
 import { DirectorModule } from './director/director.module';
 import { GenreModule } from './genre/genre.module';
 import { AuthModule } from './auth/auth.module';
@@ -28,6 +26,8 @@ import { ThrottleInterceptor } from './common/interceptor/throttle.interceptor';
 import { ScheduleModule } from '@nestjs/schedule';
 import { WinstonModule } from 'nest-winston';
 import * as winston from 'winston';
+import { validationSchema } from './common/setting/validation.schema';
+import { databaseConfig } from './common/setting/database.config';
 
 @Module({
   imports: [

@@ -5,8 +5,8 @@ import { Genre } from 'src/genre/entity/genre.entity';
 import { MovieDetail } from 'src/movie/entity/movie-detail.entity';
 import { Movie } from 'src/movie/entity/movie.entity';
 import { User } from 'src/user/entities/user.entity';
-import { envKeys } from './const/env.const';
 import { MovieUserLike } from 'src/movie/entity/movie-user-like.entity';
+import { envKeys } from '../const/env.const';
 
 export const databaseConfig = {
   useFactory: (configService: ConfigService): TypeOrmModuleOptions => {
