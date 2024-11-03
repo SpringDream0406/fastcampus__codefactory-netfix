@@ -1,4 +1,5 @@
 import { Exclude } from 'class-transformer';
+import { IsEmail, IsString } from 'class-validator';
 import { BaseTable } from 'src/common/entity/base-table.entity';
 import { MovieUserLike } from 'src/movie/entity/movie-user-like.entity';
 import { Movie } from 'src/movie/entity/movie.entity';
@@ -18,12 +19,14 @@ export class User extends BaseTable {
   @Column({
     unique: true,
   })
+  @IsEmail()
   email: string;
 
   @Exclude({
     toPlainOnly: true,
   })
   @Column()
+  @IsString()
   password: string;
 
   @Column({
