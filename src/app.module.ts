@@ -34,6 +34,7 @@ import { databaseConfig } from './common/setting/database.config';
     ConfigModule.forRoot({
       isGlobal: true,
       validationSchema: validationSchema,
+      envFilePath: process.env.NODE_ENV === 'test' ? 'test.env' : '.env',
     }),
     TypeOrmModule.forRootAsync(databaseConfig),
     ServeStaticModule.forRoot({
@@ -108,6 +109,13 @@ import { databaseConfig } from './common/setting/database.config';
   ],
 })
 export class AppModule implements NestModule {
+  // constructor() {
+  //   console.log('ENV:', process.env.ENV); // 환경 변수 확인
+  //   console.log(
+  //     'Env File Path:',
+  //     process.env.ENV === 'test' ? 'test.env' : 'default .env',
+  //   );
+  // }
   configure(consumer: MiddlewareConsumer) {
     consumer
       .apply(BearerTokenMiddleware)

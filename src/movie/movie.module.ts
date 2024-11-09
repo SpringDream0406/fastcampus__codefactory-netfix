@@ -11,6 +11,8 @@ import { join } from 'path';
 import { v4 } from 'uuid';
 import { User } from 'src/user/entities/user.entity';
 import { MovieUserLike } from './entity/movie-user-like.entity';
+import { Genre } from 'src/genre/entity/genre.entity';
+import { Director } from 'src/director/entity/director.entity';
 
 @Module({
   imports: [
@@ -18,6 +20,8 @@ import { MovieUserLike } from './entity/movie-user-like.entity';
       Movie, //
       MovieDetail,
       User,
+      Genre,
+      Director,
       MovieUserLike,
     ]),
     CommonModule,

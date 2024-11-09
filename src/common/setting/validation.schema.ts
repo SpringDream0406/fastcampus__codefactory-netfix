@@ -4,8 +4,8 @@ const requiredString = Joi.string().required();
 const requiredNumber = Joi.number().required();
 
 export const validationSchema = Joi.object({
-  ENV: requiredString,
-  DB_TYPE: requiredString,
+  ENV: Joi.string().valid('test', 'dev', 'prod').required(),
+  DB_TYPE: Joi.string().valid('postgres').required(),
   DB_HOST: requiredString,
   DB_PORT: requiredNumber,
   DB_USERNAME: requiredString,

@@ -50,7 +50,7 @@ export class Movie extends BaseTable {
   @Transform(({ value }) => `http://localhost:3000/${value}`)
   movieFilePath: string;
 
-  @ManyToOne(() => Director, (director) => director.id)
+  @ManyToOne(() => Director, (director) => director.movies)
   director: Director;
 
   @OneToMany(() => MovieUserLike, (mul) => mul.movie)

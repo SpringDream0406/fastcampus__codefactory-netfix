@@ -123,8 +123,8 @@ export class MovieService {
   }
 
   /* istanbul ignore next */
-  async findMovieDetail(id: number) {
-    return await this.movieDetailRepository
+  async findMovie(id: number) {
+    return await this.movieRepository
       .createQueryBuilder('movie')
       .leftJoinAndSelect('movie.director', 'director')
       .leftJoinAndSelect('movie.genres', 'genres')
@@ -135,10 +135,10 @@ export class MovieService {
   }
 
   async findOne(id: number) {
-    const movie = await this.findMovieDetail(id);
+    const movie = await this.findMovie(id);
 
     if (!movie) {
-      throw new NotFoundException('존재하지 않느 ㄴID의 영화입니다.');
+      throw new NotFoundException('존재하지 않는 ID의 영화입니다.');
     }
 
     return movie;
@@ -255,7 +255,7 @@ export class MovieService {
       where: {
         id: movieId,
       },
-      relations: ['director', 'genres'],
+      relations: ['director', 'genres', 'detail'],
     });
   }
 
